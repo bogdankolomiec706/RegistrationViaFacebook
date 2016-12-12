@@ -439,18 +439,21 @@ namespace RadaCode.Controllers
                 dynamic myInfo = fb.Get("/me?fields=id,email"); // specify the email field
                 loginInfo.Email = myInfo.email;
                 string id = myInfo.id;
-                var result = await SignInManager.PasswordSignInAsync(loginInfo.Email, id, true, shouldLockout: false);
-                switch (result)
+                if(UserManager.Users.Count() > 0)
                 {
-                    case SignInStatus.Success:
-                        return RedirectToLocal(returnUrl);
-                    case SignInStatus.LockedOut:
-                        return View("Lockout");
-                    case SignInStatus.Failure:
-                        return RedirectToAction("FailedRegistration","Manage");
-                    default:
-                        ModelState.AddModelError("", "Invalid login attempt.");
-                        return View(returnUrl);
+                    var result = await SignInManager.PasswordSignInAsync(loginInfo.Email, id, true, shouldLockout: false);
+                    switch (result)
+                    {
+                        case SignInStatus.Success:
+                            return RedirectToLocal(returnUrl);
+                        case SignInStatus.LockedOut:
+                            return View("Lockout");
+                        case SignInStatus.Failure:
+                            return RedirectToAction("FailedRegistration", "Manage");
+                        default:
+                            ModelState.AddModelError("", "Invalid login attempt.");
+                            return View(returnUrl);
+                    }
                 }
             }
             return RedirectToLocal(returnUrl);
