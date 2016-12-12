@@ -1,5 +1,8 @@
 namespace RadaCode.Migrations
 {
+    using Microsoft.AspNet.Identity;
+    using Microsoft.AspNet.Identity.EntityFramework;
+    using Models;
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
@@ -10,23 +13,21 @@ namespace RadaCode.Migrations
         public Configuration()
         {
             AutomaticMigrationsEnabled = true;
+            AutomaticMigrationDataLossAllowed = true;
             ContextKey = "RadaCode.Models.ApplicationDbContext";
         }
 
         protected override void Seed(RadaCode.Models.ApplicationDbContext context)
         {
-            //  This method will be called after migrating to the latest version.
-
-            //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
-            //  to avoid creating duplicate seed data. E.g.
-            //
-            //    context.People.AddOrUpdate(
-            //      p => p.FullName,
-            //      new Person { FullName = "Andrew Peters" },
-            //      new Person { FullName = "Brice Lambson" },
-            //      new Person { FullName = "Rowan Miller" }
-            //    );
-            //
+            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
+            if (context.Users.Count() == 0)
+            {
+                var mainAdmin = new ApplicationUser { Name = "Main admin", Email = "mainAdmin@gmail.com" };// bogdankolomiec@gmail.com
+                mainAdmin.UserName = mainAdmin.Email;
+                string password = "mainAdmin";
+                var result = userManager.Create(mainAdmin, password);
+            }
+            base.Seed(context);
         }
     }
 }

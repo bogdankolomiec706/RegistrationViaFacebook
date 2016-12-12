@@ -352,12 +352,9 @@ namespace RadaCode.Controllers
                 string id = myInfo.id;
                 loginInfo.Email = myInfo.email;
                 loginInfo.DefaultUserName = myInfo.first_name + " " + myInfo.last_name;
-                if (UserManager.Users.Count() > 0)
+                if (UserManager.FindByEmail(loginInfo.Email) != null)
                 {
-                    if (UserManager.FindByEmail(loginInfo.Email) != null)
-                    {
-                        TempData["IdentityMessage"] = "User is already registered.";
-                    }
+                    TempData["IdentityMessage"] = "User is already registered.";
                 }
                 return View("ExternalRegisterConfirmation", new ExternalRegisterViewModel { Id = id, Email = loginInfo.Email, Name = loginInfo.DefaultUserName });
             }
@@ -368,13 +365,10 @@ namespace RadaCode.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> ExternalRegisterConfirmation(ExternalRegisterViewModel model)
         {
-            if(UserManager.Users.Count() > 0)
+            if (UserManager.FindByEmail(model.Email) != null)
             {
-                if (UserManager.FindByEmail(model.Email) != null)
-                {
-                    TempData["IdentityMessage"] = "User is already registered.";
-                    return View();
-                }
+                TempData["IdentityMessage"] = "User is already registered.";
+                return View();
             }
             if (!ModelState.IsValid)
             {
@@ -449,7 +443,7 @@ namespace RadaCode.Controllers
                         case SignInStatus.LockedOut:
                             return View("Lockout");
                         case SignInStatus.Failure:
-                            return RedirectToAction("FailedRegistration", "Manage");
+                            return View("FailedRegistration");
                         default:
                             ModelState.AddModelError("", "Invalid login attempt.");
                             return View(returnUrl);

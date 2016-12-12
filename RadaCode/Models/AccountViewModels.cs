@@ -64,8 +64,6 @@ namespace RadaCode.Models
 
     public class RegisterViewModel
     {
-        [Required]
-        [EmailAddress]
         [Display(Name = "User name")]
         public string Name { get; set; }
 

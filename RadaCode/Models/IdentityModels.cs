@@ -26,6 +26,8 @@ namespace RadaCode.Models
         {
         }
 
+
+
         public static ApplicationDbContext Create()
         {
             return new ApplicationDbContext();

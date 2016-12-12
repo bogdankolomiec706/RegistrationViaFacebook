@@ -60,7 +60,6 @@ namespace RadaCode
             {
                 AppId = "1828187510771038",
                 AppSecret = "866380d6f342cea20f74fcf34bd358f7",
-                Scope = { "email" },
                 Provider = new FacebookAuthenticationProvider
                 {
                     OnAuthenticated = context =>
@@ -72,10 +71,9 @@ namespace RadaCode
             });
 
             /*
-             *             app.UseFacebookAuthentication(
+            app.UseFacebookAuthentication(
                appId: "1828187510771038",
                appSecret: "866380d6f342cea20f74fcf34bd358f7");
-
             */
             //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
             //{

@@ -255,8 +255,8 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Account\ExternalRegisterConfirmation.cshtml" />
     <Content Include="Views\Manage\RegisterVerifyPhoneNumber.cshtml" />
-    <Content Include="Views\Manage\SuccessfulRegistration.cshtml" />
-    <Content Include="Views\Manage\FailedRegistration.cshtml" />
+    <Content Include="Views\Shared\SuccessfulRegistration.cshtml" />
+    <Content Include="Views\Shared\FailedRegistration.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
