@@ -352,9 +352,12 @@ namespace RadaCode.Controllers
                 string id = myInfo.id;
                 loginInfo.Email = myInfo.email;
                 loginInfo.DefaultUserName = myInfo.first_name + " " + myInfo.last_name;
-                if (UserManager.FindByEmail(loginInfo.Email) != null)
+                if (UserManager.Users.Count() > 0)
                 {
-                    TempData["IdentityMessage"] = "User is already registered.";
+                    if (UserManager.FindByEmail(loginInfo.Email) != null)
+                    {
+                        TempData["IdentityMessage"] = "User is already registered.";
+                    }
                 }
                 return View("ExternalRegisterConfirmation", new ExternalRegisterViewModel { Id = id, Email = loginInfo.Email, Name = loginInfo.DefaultUserName });
             }
@@ -365,17 +368,19 @@ namespace RadaCode.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> ExternalRegisterConfirmation(ExternalRegisterViewModel model)
         {
-            if (UserManager.FindByEmail(model.Email) != null)
+            if(UserManager.Users.Count() > 0)
             {
-                TempData["IdentityMessage"] = "User is already registered.";
-                return View();
+                if (UserManager.FindByEmail(model.Email) != null)
+                {
+                    TempData["IdentityMessage"] = "User is already registered.";
+                    return View();
+                }
             }
             if (!ModelState.IsValid)
             {
                 TempData["ModelStateMessage"] = "Invalid data.";
                 return View();
             }
-
 
             string code = GenerateSMSCode(model.Email,model.Phone);
             if (UserManager.SmsService != null)
