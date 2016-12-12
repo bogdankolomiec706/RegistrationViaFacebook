@@ -1,0 +1,46 @@
+﻿@model RadaCode.Models.ExternalLoginListViewModel
+@using Microsoft.Owin.Security
+@{
+    var action = (ViewContext.RouteData.Values["action"] ?? "").ToString().ToLower();
+    var loginProviders = Context.GetOwinContext().Authentication.GetExternalAuthenticationTypes();
+}
+@if (action == "login")
+{
+    <h4>Use another service to log in.</h4>
+    <hr />
+    if (loginProviders.Count() != 0)
+    {
+        using (Html.BeginForm("ExternalLogin", "Account", new { ReturnUrl = Model.ReturnUrl }))
+        {
+            @Html.AntiForgeryToken()
+            <div id="socialLoginList">
+                <p>
+                    @foreach (AuthenticationDescription p in loginProviders)
+                    {
+                        <button type="submit" class="btn btn-default" id="@p.AuthenticationType" name="provider" value="@p.AuthenticationType" title="Log in using your @p.Caption account">@p.AuthenticationType</button>
+                    }
+                </p>
+            </div>
+        }
+    }
+}
+else if (action == "register")
+{
+    <h4>Use another service to register.</h4>
+    <hr />
+    if (loginProviders.Count() != 0)
+    {
+        using (Html.BeginForm("ExternalRegister", "Account", new { ReturnUrl = Model.ReturnUrl }))
+        {
+            @Html.AntiForgeryToken()
+            <div id="socialLoginList">
+                <p>
+                    @foreach (AuthenticationDescription p in loginProviders)
+                    {
+                        <button type="submit" class="btn btn-default" id="@p.AuthenticationType" name="provider" value="@p.AuthenticationType" title="Log in using your @p.Caption account">@p.AuthenticationType</button>
+                    }
+                </p>
+            </div>
+        }
+    }
+}
